@@ -1,5 +1,6 @@
 package com.lclz.one;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.lucene.analysis.Analyzer;
@@ -11,6 +12,7 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
@@ -19,20 +21,21 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.RAMDirectory;
+import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
-public class FirstExample {
+public class FirstFSExapmle {
 
 	private Analyzer analyzer;
 	private Directory directory;
 	private IndexWriter indexWriter;
 
-	public FirstExample() throws IOException {
+	public FirstFSExapmle() throws IOException {
 		// Creating an analyzer
 		analyzer = new WhitespaceAnalyzer();// 用空格做为分界符
-		directory = new RAMDirectory();// index存入内存中
+		directory = FSDirectory.open(new File("/Users/llw/tmp/lucene/index"));
 		IndexWriterConfig config = new IndexWriterConfig(Version.LATEST, analyzer);
+		config.setOpenMode(OpenMode.CREATE);
 		indexWriter = new IndexWriter(directory, config);
 	}
 
@@ -98,4 +101,5 @@ public class FirstExample {
 		fe.search();
 
 	}
+
 }
